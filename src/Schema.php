@@ -471,7 +471,7 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
         $c->name = strtolower(rtrim($column['fname']));
         $c->allowNull = (int) $column['fnull'] !== 1;
         $c->isPrimaryKey = $column['fprimary'];
-        $c->autoIncrement = (isset($column['fgenerator_name']) && $column['fgenerator_name']) || (boolean) $column['fautoinc'];
+        $c->autoIncrement = (isset($column['fgenerator_name']) && $column['fgenerator_name']) || (bool) $column['fautoinc'];
         $c->comment = $column['fcomment'] === null ? '' : $column['fcomment'];
 
         $c->type = self::TYPE_STRING;
