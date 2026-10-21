@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "8.5",
+        "php": "~8.5.0",
         "ext-pdo": "*",
         "ext-pdo_firebird": "*",
         "yiisoft/yii2": "~2.0.55"
