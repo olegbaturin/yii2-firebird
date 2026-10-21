@@ -381,12 +381,8 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
                     fld.rdb$field_precision AS fprecision,
                     rel.rdb$null_flag AS fnull,
                     rel.rdb$description AS fcomment,
-                    fld.rdb$default_value AS fdefault_value,';
-
-        if ($this->db->supportColumnIdentity) {
-            $sql .= '
+                    fld.rdb$default_value AS fdefault_value,
                     rel.rdb$generator_name AS fgenerator_name,';
-        }
 
         $sql .= '
                     (SELECT RDB$TRIGGER_SOURCE FROM RDB$TRIGGERS
@@ -427,6 +423,9 @@ class Schema extends BaseSchema implements ConstraintFinderInterface
         $pkeys = array_map('rtrim', $pkeys);
         $pkeys = array_map('strtolower', $pkeys);
         foreach ($columns as $key => $column) {
+            $column = array_filter($column, function($item){
+                return is_string($item);
+            });
             $column = array_map('strtolower', $column);
             $columns[$key]['fprimary'] = in_array(rtrim($column['fname']), $pkeys);
         }
@@ -716,34 +715,15 @@ ORDER BY id.RDB$RELATION_NAME, id.RDB$INDEX_NAME, ids.RDB$FIELD_POSITION';
     {
         $this->_lastInsertID = false;
         $params = [];
-        $sql = "";
+        //$sql = "";
+        $sql = $this->db->getQueryBuilder()->insert($table, $columns, $params);
         $returnColumns = $this->getTableSchema($table)->primaryKey;
         if (!empty($returnColumns)) {
-            if (!$this->db->supportReturningInsert) {
-                $returs = [];
-                $returning = [];
-                $columnSchemas = $this->getTableSchema($table)->columns;
-                foreach ((array) $returnColumns as $name) {
-                    $returs[] = $this->quoteColumnName($name) . ' ' . $columnSchemas[$name]->dbType;
-                    $returning[] = $this->quoteColumnName($name);
-                }
-
-                $sql = $this->db->getQueryBuilder()->rawInsert($table, array_keys($columns), array_values($columns), $params);
-
-                $sql = "EXECUTE block RETURNS (" 
-                        . implode(', ',$returs) 
-                        . ") AS BEGIN\n" 
-                        . $sql . ' RETURNING ' . implode(', ', $returning)
-                        . ' INTO ' . implode(', ', $returning)
-                        . ";\nSUSPEND;\nEND;";
-            } else {
-                $sql = $this->db->getQueryBuilder()->insert($table, $columns, $params);
-                $returning = [];
-                foreach ((array) $returnColumns as $name) {
-                    $returning[] = $this->quoteColumnName($name);
-                }
-                $sql .= ' RETURNING ' . implode(', ', $returning);
+            $returning = [];
+            foreach ((array) $returnColumns as $name) {
+                $returning[] = $this->quoteColumnName($name);
             }
+            $sql .= ' RETURNING ' . implode(', ', $returning);
         }
 
         $command = $this->db->createCommand($sql, $params);

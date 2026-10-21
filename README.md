@@ -19,7 +19,7 @@ This extension adds [Firebird](http://www.firebirdsql.org/) database engine exte
 Requirements
 ------------
 
-At least Firebird version 2.0 is required. However, in order to use all extension features.
+At least Firebird version 3.0 is required. However, in order to use all extension features.
 
 Partial support with Firebird 3.0
 
@@ -30,8 +30,6 @@ Functions not supported by the Firebird database:
 
  * Rename Table - [See this FAQ](http://www.firebirdfaq.org/faq363/)
  * Check Integrity - [Track](http://tracker.firebirdsql.org/browse/CORE-1924)
- * BLOB data type for pdo_firebird <= 7.0.13 - [See this bug](https://bugs.php.net/bug.php?id=61183)
- * BOOLEAN data type for pdo_firebird - [See this bug](https://bugs.php.net/bug.php?id=74462)
 
 Installation
 ------------
@@ -71,20 +69,3 @@ return [
     ],
 ];
 ```
-
-## Donations:
-* Donation is as per your goodwill to support my development.
-* If you are interested in my future developments, i would really appreciate a small donation to support this project.
-```html
-My Monero Wallet Address (XMR)
-429VTmDsAw4aKgibxkk4PzZbxzj8txYtq5XrKHc28pXsUtMDWniL749WbwaVe4vUMveKAzAiA4j8xgUi29TpKXpm41bmrwQ
-```
-```html
-My Bitcoin Wallet Address (BTC)
-38hcARGVzgYrcdYPkXxBXKTqScdixvFhZ4
-```
-```html
-My Ethereum Wallet Address (ETH)
-0xdb77aa3d0e496c73a0dac816ac33ea389cf54681
-```
-Another Cryptocurrency: https://freewallet.org/id/edgardmessias
